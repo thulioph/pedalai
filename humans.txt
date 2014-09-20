@@ -1,0 +1,35 @@
+###########################################################
+#                     GUAVA SOFTWARE
+############################################################
+
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+/* TEAM */
+
+  Co-Founder & Developer: Guilherme Carvalho
+  Twitter: @guieevc
+  From: Brazil, Pernambuco, Recife
+
+  Co-Founder & Developer: Lailson Bandeira
+  Twitter: @lailsonbm
+  From: Brazil, Pernambuco, Recife
+
+  Co-Founder & Developer: Lucas Marinho
+  Twitter: @lmarinho
+  From: Brazil, Pernambuco, Olinda
+
+  Designer: Sérgio Fontes
+  Twitter: @srgfnts
+  From: Brazil, Pernambuco, Recife
+
+  Front-End Engineer: Thulio Philipe
+  Twitter: @thulioph_
+  From: Brazil, Pernambuco, Recife
+
+
+/* TECHNOLOGY COLOPHON */
+
+  Last update: 2014/09/12
+  Standards: HTML5, CSS3, LESS, Ruby, Rails
+  Components: jQuery, Bootstrap
