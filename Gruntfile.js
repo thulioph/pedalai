@@ -3,7 +3,7 @@
 module.exports = function( grunt ) {
 	// Definição dos arquivos js
 	var filesJS = [
-            'src/js/APP.js', 
+            'src/js/APP.js',
             'src/js/APP.Geolocation.js',
             'src/js/APP.Home.js',
             'src/js/APP.Request.js',
@@ -118,7 +118,7 @@ module.exports = function( grunt ) {
 
 	// registrando tarefa default
 	// grunt.registerTask( 'default', [ 'browserSync', 'watch' ] );
-  grunt.registerTask( 'default', [ 'browserSync', 'watch' ] );
+  grunt.registerTask( 'default', [ 'watch' ] );
 	grunt.registerTask( 'img', [ 'imagemin' ] );
 	grunt.registerTask( 'src', [ 'compass:src', 'concat:js', 'concat:css' ] );
 	grunt.registerTask( 'dist', [ 'compass:dist', 'uglify:dist', 'concat:css', 'imagemin' ] );
