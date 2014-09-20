@@ -1,0 +1,29 @@
+{
+  "name": "pedalai",
+  "version": "2.0.0",
+  "homepage": "https://github.com/thulioph/pedalai",
+  "authors": [
+    "Thulio Philipe <thulioph@gmail.com>"
+  ],
+  "description": "Projeto desenvolvido no Hackaton da Campus Party Recife 3",
+  "main": "src/js/APP.Home.js",
+  "keywords": [
+    "bike",
+    "pedalai"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0"
+  },
+  "devDependencies": {
+    "bootstrap-sass-official": "~3.2.0+2",
+    "handlebars": "~2.0.0"
+  }
+}
