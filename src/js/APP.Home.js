@@ -1,228 +1,247 @@
 var APP = APP || {};
+var Geolocation = APP || {};
 
-APP.Home = {
-  _map: null,
+APP.Geolocation.Home = {
+  _objResponse: null,
 
   setUp: function(){
     var that = this;
-    that.initialize();
-    that.getData();
   },
 
-  initialize: function() {
-    var that = this;
+  Map: {
+    _map: null,
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success, error, options);
-    } else {
-      error('Não suportado!');
-    }
+    setUp: function(){
+      
+    },
 
-    var options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-    };
+    // método que cria o mapa e marca a posição do usuário
+    createMap: function(){
+      var that       = this,
+          latitude   = APP.Geolocation._latitude,
+          longitude  = APP.Geolocation._longitude,
+          myLatlng   = new google.maps.LatLng(latitude, longitude),
+          
+          mapOptions = {
+            zoom: 12,
+            center: myLatlng,
+            panControl: false,
+            mapTypeControl: true,
+            zoomControl: true,
+            streetViewControl: false,
+            mapTypeControlOptions: {
+              position: google.maps.ControlPosition.RIGHT_BOTTOM
+            },
+            zoomControlOptions: {
+              style: google.maps.ZoomControlStyle.LARGE,
+              position: google.maps.ControlPosition.LEFT_BOTTOM
+            },
+            // scrollwheel: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            styles: [
+              {
+                stylers: [
+                  { saturation: -70 },
+                ]
+              }
+            ]
+          },
 
-    function success(position) {
-      // como coordenadas passo o retorno da API (position.coords.latitude, position.coords.longitude)
-      var myLatlng = new google.maps.LatLng(-8.031030, -34.871268);
+          image = 'http://google-maps-icons.googlecode.com/files/cycling.png'.
 
-      // Parâmetros do mapa
-      var mapOptions = {
-        zoom: 12,
-        center: myLatlng,
-        panControl: false,
-        scrollwheel: false,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
+          marker;
 
-       // Parâmetros do texto que será exibido no clique;
-       var contentString = '<h2>Você está aqui</h2>' +
-       '<p>Este foi um exemplo de como pegar a geolocalização do usuário</p>';
-       var infowindow = new google.maps.InfoWindow({
-        content: contentString,
-        maxWidth: 750
-      });
-
-      // Exibir o mapa na div #mapuser;
+      // exibir o mapa no elemento html;
       that._map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-      // Marcador personalizado;
-      var image = 'http://google-maps-icons.googlecode.com/files/cycling.png';
-      var marcadorPersonalizado = new google.maps.Marker({
+      // marcador personalizado;
+      image = 'http://google-maps-icons.googlecode.com/files/cycling.png';
+
+      marker = new google.maps.Marker({
         position: myLatlng,
         map: that._map,
         icon: image,
-        animation: google.maps.Animation.BOUNCE
+        // animation: google.maps.Animation.BOUNCE
       });
 
-      // Exibir texto ao clicar no pin;
-      google.maps.event.addListener(marcadorPersonalizado, 'click', function() {
-        infowindow.open(that._map,marcadorPersonalizado);
-      });
+      // info da posição do usuário
+      var myOptions = {
+        content: '<h1>Você está aqui!</h1>',
+        disableAutoPan: false,
+        maxWidth: 0,
+        pixelOffset: new google.maps.Size(-85, 0),
+        zIndex: null,
+        boxStyle: { 
+          marginTop: '10px',
+          width: '170px'
+        },
+        closeBoxMargin: "0 2px 2px 2px",
+        closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
+        infoBoxClearance: new google.maps.Size(1, 1),
+        isHidden: false,
+        pane: "floatPane",
+        enableEventPropagation: false
+      };
 
-    }
+      var infobox = new InfoBox(myOptions);
+      infobox.open(that.pai().Map._map, marker);
 
-    // Função de error caso o navegador não suporte a geolocalização
-    function error(msg) {
-      console.log("Erro é: " + navigator.geolocalização);
+      // ativa o método que cria as ciclofaixas depois que o mapa é criado
+      if (that._map !== null) {
+        if (that.pai()._objResponse === null) {
+          that.pai().Cycle.makeCycleway();
+        }
+      };
     }
   },
 
-  getData: function() {
-    var that = this;
+  Cycle: {
+    // método que cria as ciclofaixas, ciclovias e rotas de bicicletas
+    makeCycleway: function(){
+      var that = this,
+          path = 'json.php',
+          params = {
+            latitude: APP.Geolocation._latitude,
+            longitude: APP.Geolocation._longitude
+          },
+          request = $.when(APP.Request.makeRequest(path, params));
 
-    $.ajax({
-    url: 'proxy.php',
-    dataType: 'JSON',
-      beforeSend: function() {
-        console.log("Carregando...");
-      },
-      complete: function(){
-        console.log("Carregou!!!");
-      },
-      success: function(pontos) {
-        var arrCiclo = pontos,
-            i = 0, c, countFeatures, countCoordinates,
-
+      request.done(function(response){console.log(response);
+        var c, countCoordinates,
             colors = [
-              "#FF0000", 
-              "#00FF00", 
-              "#0000FF", 
-              "#622b06", 
-              "#000000", 
-              "#79790b", 
-              "#1d628e", 
-              "#FF00FF",
-              "#00ff84",
-              "#0000ff",
-              "#000",
-              "#9600ff",
-              "#08541a",
-              "#e37906"
+              "#FF0000", // Ciclovia - red
+              "#015d01", // Ciclofaixa Móvel - green
+              "#0000FF", // Ciclofaixa - blue
+              "#e85d00"  // Rota - orange
           ];
 
-          setTimeout(function(){
-              $.each(arrCiclo, function(idx, value){
-                var DrivePath = [],
-                  coordinates = value.geometry;
+        // guarda o objeto retornado da requisição
+        that.pai()._objResponse = response;
 
-                for (c = 0, countCoordinates = coordinates.length; c < countCoordinates; c = c+1) {
-                  var coordinate = coordinates[c],
-                  latitude = coordinate[1],
-                  longitude = coordinate[0];
+        // percorre todos os objetos de ciclovias encontradas
+        $.each(that.pai()._objResponse.cicloways, function(idx, value){
+          var DrivePath = [],
+            coordinates = value.geometry;
 
-                  DrivePath.push(new google.maps.LatLng(latitude, longitude));
-                }
+          for (c = 0, countCoordinates = coordinates.length; c < countCoordinates; c = c+1) {
+            var coordinate = coordinates[c],
+            latitude = coordinate[1],
+            longitude = coordinate[0];
 
-                var PathStyle = new google.maps.Polyline({
-                  path: DrivePath,
-                  strokeColor: colors[i],
-                  strokeOpacity: 1.0,
-                  strokeWeight: 2,
-                  map: that._map,
-                  id: value.id
-                });
+            // monta o array com as posições das ciclovias
+            DrivePath.push(new google.maps.LatLng(latitude, longitude));
+          }
 
-                PathStyle.setMap(that._map);
+          // pinta as ciclovias de acordo com o tipo de via
+          var PathStyle = new google.maps.Polyline({
+            path: DrivePath,
+            strokeColor: '',
+            strokeOpacity: 1.0,
+            strokeWeight: 3,
+            map: that.pai().Map._map,
+            id: value.id
+          });
 
-                var marcadorPersonalizado = new google.maps.Marker({
-                  position: new google.maps.LatLng(DrivePath[0].k, DrivePath[0].B),
-                  map: that._map,
-                  id: value.id
-                  // icon: image,
-                });
+          switch (value.type) {
+            case 'Ciclovia':
+              PathStyle['strokeColor'] = colors[0];
+              break;
+            case 'Ciclofaixa Móvel':
+              PathStyle['strokeColor'] = colors[1];
+              break;
+            case 'Ciclofaixa':
+              PathStyle['strokeColor'] = colors[2];
+              break;
+            case 'Rota':
+              PathStyle['strokeColor'] = colors[3];
+              break;
+          }
 
-                // var infowindow = new google.maps.InfoWindow({
-                //     content: '<h1 class="title-info">' + value.name + '</h1>' + 
-                //             '<h2 class="distance-info">' + value.distance + ' km de distância</h2>' + 
-                //             '<a class="link-info">Pedalar até aqui</a>',
-                //     id: value.id,
-                //     maxWidth: 170
-                // });
-                
-                // infowindow.setPosition(new google.maps.LatLng(DrivePath[0].k, DrivePath[0].B));
-                // infowindow.open(that._map);
+          // insere as ciclovias no mapa
+          PathStyle.setMap(that.pai().Map._map);
 
-                var infowindow = new google.maps.InfoWindow();
+          // marcador de cada ciclovia
+          if (DrivePath.length % 2 == 0) {
+            var customMarker = new google.maps.Marker({
+              position: new google.maps.LatLng(DrivePath[DrivePath.length / 2].k, DrivePath[DrivePath.length / 2].B),
+              map: that.pai().Map._map,
+              id: value.id,
+              icon: 'src/images/location.svg'
+            });
+          } else {
+            var customMarker = new google.maps.Marker({
+              position: new google.maps.LatLng(DrivePath[(DrivePath.length + 1) / 2].k, DrivePath[(DrivePath.length + 1) / 2].B),
+              map: that.pai().Map._map,
+              id: value.id,
+              icon: 'src/images/location.svg'
+            });
+          }
 
-                google.maps.event.addListener(marcadorPersonalizado, 'click', (function(marcadorPersonalizado, i) {
-                  
-                  return function() {
-                    infowindow.setContent(
+          var boxText = '<h1 class="title-info">' + value.name + '</h1>' +
+                        '<h2 class="distance-info">' + value.distance + ' km de distância</h2>' +
+                        '<a class="link-info">Pedalar até aqui</a>';
 
-                      '<h1 class="title-info">' + value.name + '</h1>' + 
-                            '<h2 class="distance-info">' + value.distance + ' km de distância</h2>' + 
-                            '<a class="link-info">Pedalar até aqui</a>'
-                      
-                    );
-                    
-                    infowindow.open(that._map, marcadorPersonalizado);
-                  }
+          var myOptions = {
+            content: boxText,
+            disableAutoPan: false,
+            maxWidth: 0,
+            pixelOffset: new google.maps.Size(-140, 0),
+            zIndex: null,
+            boxStyle: { 
+              marginTop: '13px',
+              width: '280px'
+            },
+            closeBoxMargin: "0 2px 2px 2px",
+            closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
+            infoBoxClearance: new google.maps.Size(1, 1),
+            isHidden: false,
+            pane: "floatPane",
+            enableEventPropagation: false
+          };
 
-              })(marcadorPersonalizado));
+          var infobox = new InfoBox(myOptions),
+              markerSelected;
 
-                $('#main-section').on('click', '.locais-item', function(event){
-                  var id = $(event.currentTarget).attr('id');
+          google.maps.event.addListener(customMarker, 'click', (function(customMarker) {
 
-                  marcadorPersonalizado.setVisible(false);
-                  $('#main-section').empty().css('z-index', '-999999');
+            return function() {
+              infobox.open(that.pai().Map._map, customMarker);
+              markerSelected = customMarker;
+            }
 
-                  if (marcadorPersonalizado.id == id) {
-                    
-                    marcadorPersonalizado.setVisible(true);
-                    infowindow.open(that._map, marcadorPersonalizado);
-                  }
-                });
+          })(customMarker));
 
-                $('.right-small').on('click', function(event){
-                  marcadorPersonalizado.setVisible(true);
-                });
+          google.maps.event.addListener(infobox, 'domready', function () {
+            $('.infoBox').on('click', '.link-info', function(event){
+              var element = event.currentTarget,
 
-                i++;
-              });
-    }, 1000);
+                  rendererOptions = {
+                    draggable: true
+                  },
+                  directionsService = new google.maps.DirectionsService(),
+                  directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
 
-          // for (i = 0, countFeatures = arrCiclo.length; i < countFeatures; i = i+1) {
-          //   var objCiclo = arrCiclo[i],
-          //   coordinates = objCiclo.geometry.coordinates;
+                  directionsDisplay.setMap(that.pai().Map._map);
 
-          //   var DrivePath = [];
+                  var start = new google.maps.LatLng(APP.Geolocation._latitude, APP.Geolocation._longitude),
+                      end = new google.maps.LatLng(markerSelected.position.k, markerSelected.position.B),
+                      request = {
+                        origin: start,
+                        destination: end,
+                        travelMode: google.maps.TravelMode.DRIVING
+                      };
+              
+                  directionsService.route(request, function(response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {console.log(response);
+                      directionsDisplay.setDirections(response);
+                    }
+                  });
 
-          //   for (c = 0, countCoordinates = coordinates.length; c < countCoordinates; c = c+1) {
-          //     var coordinate = coordinates[c],
-          //     latitude = coordinate[1],
-          //     longitude = coordinate[0];
-
-          //     DrivePath.push(new google.maps.LatLng(latitude, longitude));
-          //   }
-
-          //   var PathStyle = new google.maps.Polyline({
-          //     path: DrivePath,
-          //     strokeColor: colors[i],
-          //     strokeOpacity: 1.0,
-          //     strokeWeight: 2,
-          //     map: that._map,
-          //     id: objCiclo.id
-          //   });
-
-          //   PathStyle.setMap(that._map);
-
-          //   var infowindow = new google.maps.InfoWindow({
-          //       content: '<h1 class="title-info">' + objCiclo.properties.Name + '</h1>',
-          //       id: objCiclo.id
-          //   });
-            
-          //   infowindow.setPosition(new google.maps.LatLng(DrivePath[0].k, DrivePath[0].B));
-          //   infowindow.open(that._map);
-
-          // }
-
-      },
-      error: function() {
-        console.log("Error!");
-      }
-    });
+              event.preventDefault();
+            });
+          });
+        });
+      });
+    }
   }
 }

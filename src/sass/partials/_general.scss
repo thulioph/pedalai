@@ -2,6 +2,10 @@ html, body {
 	height: 100%;
 }
 
+img {
+  max-width: inherit;
+}
+
 %content {
   position: absolute;
   font-size: 2em;
@@ -61,33 +65,36 @@ input {
 .canvas-list {
   @extend %title;
   border-bottom: 1px solid #262626;
-  a {
-    padding-bottom: 20px;
-    padding-left: 50px !important;
-    font-size: 2em;
-    border: none !important;
-    position: relative;
-    &.alone {
-      &::before {
-        content: "";
-        background: transparent url("https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male-32.png") no-repeat center center;
-      }
-    }
-    &.group {
-      &::before {
-        content: "";
-        background: transparent url("https://cdn2.iconfinder.com/data/icons/pittogrammi/142/88-32.png") no-repeat center center;
-      }
-    }
+  cursor: pointer;
+  padding-bottom: 20px;
+  padding-left: 50px !important;
+  font-size: 2em;
+  position: relative;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, .1);
+  }
+
+  &#alone {
     &::before {
       content: "";
-      width: 30px;
-      height: 30px;
-      display: inline-block;
-      position: absolute;
-      left: 10px;
-      top: 5px;
+      background: transparent url("https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male-32.png") no-repeat center center;
     }
+  }
+  &#group {
+    &::before {
+      content: "";
+      background: transparent url("https://cdn2.iconfinder.com/data/icons/pittogrammi/142/88-32.png") no-repeat center center;
+    }
+  }
+  &::before {
+    content: "";
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    position: absolute;
+    left: 10px;
+    top: 10px;
   }
 }
 
@@ -117,13 +124,14 @@ input {
 
 .inner-wrap {
   background-color: rgba(4, 34, 62, .4);
+  height: 80px;
 }
 
 .tab-bar {
   display: inline-block;
   vertical-align: middle;
   width: 70%;
-  margin: 2.5% 0;
+  margin: 17px 0;
   left: 5%;
   background: #ffffff;
   border: 1px solid #fff;
@@ -196,7 +204,7 @@ ul.off-canvas-list {
   border-left: solid 1px #1a1a1a;
   margin-left: 60px;
   background: #ffffff;
-  margin: 2.5% auto;
+  margin: 17px auto;
   right: -12%;
   position: relative;
   a {
@@ -208,6 +216,9 @@ ul.off-canvas-list {
   }
 }
 
+.move-right .exit-off-canvas {
+  @include boxShadow(none);
+}
 
 // MAP
 
@@ -273,11 +284,33 @@ ul.off-canvas-list {
 // LIST LOCAIS / SOZINHO
 
 .main-section {
+  background-color: rgba(255, 255, 255, .6);
   width: 100%;
-  min-height: 510px;
   position: absolute;
-  height: auto;
   z-index: -999999;
+  overflow: scroll;
+  top: 80px;
+  left: 0;
+
+  ul {
+    background-color: #fff;
+    // height: 100%;
+    position: relative;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  li {
+    padding: 20px;
+
+    &:nth-child(odd) {
+      background-color: #dedede;
+    }
+  }
+
+  h5 {
+    font-size: 2em;
+  }
 }
 
 .locais-list {
@@ -392,14 +425,6 @@ ul.off-canvas-list {
 .distance-info {
   font-size: .8em;
   margin: 5px 0;
-}
-.link-info {
-  font-weight: 900;
-  display: block;
-  text-align: center;
-  border-top: 1px solid;
-  padding: 6px 0;
-  background: rgba(0,0,0, .1);
 }
 
 //

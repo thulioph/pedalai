@@ -1,6 +1,6 @@
-/index.php
+/config.php
 /sftp-config.json
-/.DS_Store
+.DS_Store
 node_modules/*
 .sass-cache/*
 .git
