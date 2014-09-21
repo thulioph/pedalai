@@ -1,14 +1,21 @@
-// font
-$base-font-size: 10px;
+// fonts
+$fs-base: 10px;
 
-$font-1: 'Georgia', 'sans-serif';
+$font-primary: 'Georgia', 'sans-serif';
+$font-secondary: 'source';
+
 
 // images
 $_BASEPATH: '../../src/images/';
 
+
 // colors
-$color-default: #000;
-$black: #333333;
+$black: #000;
+$color-primary: $black;
+
+$gray: #333333;
+$color-secondary: $gray;
+
 
 // mixins
 @mixin transition($rulers...){

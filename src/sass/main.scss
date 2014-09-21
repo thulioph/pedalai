@@ -1,18 +1,13 @@
 // reset
 @import 'compass/reset';
 
-// libs
-@import 'bootstrap';
-
 // base
 @import 'base';
 
-// components
-@import 'components/button';
-@import 'components/form';
-
 // partials
-@import 'partials/sprite-generator';
+// @import 'partials/sprite-generator';
 @import 'partials/fonts';
 @import 'partials/general';
-@import 'partials/home';
+
+// media
+@import 'partials/media'

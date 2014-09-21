@@ -12,7 +12,7 @@ APP.Geolocation.Home = {
     _map: null,
 
     setUp: function(){
-      
+
     },
 
     // método que cria o mapa e marca a posição do usuário
@@ -21,7 +21,7 @@ APP.Geolocation.Home = {
           latitude   = APP.Geolocation._latitude,
           longitude  = APP.Geolocation._longitude,
           myLatlng   = new google.maps.LatLng(latitude, longitude),
-          
+
           mapOptions = {
             zoom: 12,
             center: myLatlng,
@@ -71,11 +71,16 @@ APP.Geolocation.Home = {
         maxWidth: 0,
         pixelOffset: new google.maps.Size(-85, 0),
         zIndex: null,
-        boxStyle: { 
+        boxStyle: {
           marginTop: '10px',
-          width: '170px'
+          width: '170px',
+          height: '170px',
+          background: '#fff',
+          borderRadius: '100%',
+          textAlign: 'center',
+          lineHeight: '170px;'
         },
-        closeBoxMargin: "0 2px 2px 2px",
+        closeBoxMargin: "20px 12px 2px 2px",
         closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
         infoBoxClearance: new google.maps.Size(1, 1),
         isHidden: false,
@@ -187,11 +192,15 @@ APP.Geolocation.Home = {
             maxWidth: 0,
             pixelOffset: new google.maps.Size(-140, 0),
             zIndex: null,
-            boxStyle: { 
+            boxStyle: {
               marginTop: '13px',
-              width: '280px'
+              width: '200px',
+              height: '200px',
+              background: '#fff',
+              borderRadius: '100%',
+              textAlign: 'center'
             },
-            closeBoxMargin: "0 2px 2px 2px",
+            closeBoxMargin: "20px 12px 2px 2px",
             closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
             infoBoxClearance: new google.maps.Size(1, 1),
             isHidden: false,
@@ -230,7 +239,7 @@ APP.Geolocation.Home = {
                         destination: end,
                         travelMode: google.maps.TravelMode.DRIVING
                       };
-              
+
                   directionsService.route(request, function(response, status) {
                     if (status == google.maps.DirectionsStatus.OK) {console.log(response);
                       directionsDisplay.setDirections(response);

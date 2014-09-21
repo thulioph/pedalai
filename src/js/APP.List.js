@@ -8,11 +8,11 @@ APP.Geolocation.Home.List = {
 
     $('.main-section').css('height', bodyHeight - 80);
 
-    $('.canvas-list').on('click', function(event) {
+    $('.list-item').on('click', function(event) {
       var element = $(event.currentTarget),
           id = element.attr('id'),
           request;
-      
+
       $('.main-section').empty();
 
       if (that.pai()._objResponse !== null) {
@@ -42,15 +42,15 @@ APP.Geolocation.Home.List = {
 
   makeList: function(obj, typeId) {
     var that = this,
-        ul = $('<ul>').appendTo('#main-section'),
+        ul = $('<ul class="col-xs-12 list-alone">').appendTo('#main .row'),
         fragment = document.createDocumentFragment();
 
     if (typeId === 'alone') {
       $.each(obj.cicloways, function(idx, item){
-        var li = $('<li>'),
-            h5 = $('<h5>'),
-            distance = $('<p>');
-            type = $('<p>');
+        var li = $('<li class="item-alone">'),
+            h5 = $('<h5 class="title-local">'),
+            distance = $('<p class="distance">');
+            type = $('<small>');
 
         h5.text(item.name).appendTo(li);
         distance.text(item.distance).appendTo(li);
@@ -61,7 +61,7 @@ APP.Geolocation.Home.List = {
 
     } else {
       $.each(obj.groups, function(idx, item){
-        var li = $('<li>'),
+        var li = $('<li class="item-group">'),
             h5 = $('<h5>'),
             h4 = $('<h4>'),
             distance = $('<p>'),
