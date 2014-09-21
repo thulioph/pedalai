@@ -1,0 +1,137 @@
+<!doctype html>
+<html xmlns:og="http://ogp.me/ns#" lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+
+    <title>Pedalaí</title>
+
+    <!-- META TAGS -->
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="robots" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="format-detection" content="telephone=yes">
+    <meta http-equiv="cleartype" content="on">
+
+    <!-- CSS -->
+    <link rel="canonical" href="#">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="src/css/main.css">
+
+    <!-- HUMANS -->
+    <link type="text/plain" rel="author" href="http://www.dominio.com.br/humans.txt" />
+
+    <!-- FAVICON E TOUCH ICON IN THE ROOT DIRECTORY -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./apple-touch-icon-ipad.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="./apple-touch-icon-iphone4.png" />
+
+    <!-- OPEN GRAPH -->
+    <meta property='og:title' content='' />
+    <meta property='og:description' content='' />
+    <meta property='og:url' content='' />
+    <meta property='og:image' content='http://url-do-site/img/img-og-facebook-200x200.png'/>
+    <meta property='og:type' content='website' />
+    <meta property='og:site_name' content='' />
+</head>
+
+<body data-screen="home">
+
+  <!-- <header class="header-primary">
+    <button id="btn-primary" class="btn btn-primary" title="Quer pedalar?">
+      <span class="glyphicon glyphicon-list"></span>
+      Quero Pedalar
+    </button>
+
+    <ul id="list-actions" class="list-actions">
+      <li class="list-item">
+        <a href="#" class="list-link alone" id="alone" title="Quero pedalar sozinho">
+          <span class="glyphicon glyphicon-user"></span>
+          Sozinho
+        </a>
+      </li>
+
+      <li class="list-item">
+        <a href="#" class="list-link group" id="group" title="Quero pedalar em grupo">
+          <span class="glyphicon glyphicon-asterisk"></span>
+          Em grupo
+        </a>
+      </li>
+    </ul>
+  </header> -->
+
+  <!-- <main id="main" class="container-fluid main main-section"> -->
+    <!-- <div class="row"> -->
+      <!-- <h2 class="col-xs-12 subtitle">Sozinho</h2> -->
+
+      <!-- Pedalar sozinho -->
+      <!-- <ul class="col-xs-12 list-alone" id="list-alone">
+        <li class="item-alone">
+          <a href="#">
+            <div class="info">
+              <h3 class="title-local">Praça da Jaqueira</h3>
+              <small class="distance">1,5km de distância</small>
+            </div>
+
+            <figure class="icon">
+              <img src="http://dummyimage.com/40x40/4d494d/686a82.gif&text=icon" alt="placeholder+image">
+            </figure>
+          </a>
+        </li>
+      </ul> -->
+
+      <!-- Pedalar em Grupo -->
+      <!-- <ul class="col-xs-12 list-group" id="list-group">
+        <li class="item-group">
+          <a href="#">
+            <div class="info">
+              <h3 class="title-local">Praça da Jaqueira</h3>
+              <small class="distance">1,5km de distância</small>
+            </div>
+
+            <figure class="icon">
+              <img src="http://dummyimage.com/40x40/4d494d/686a82.gif&text=icon" alt="placeholder+image">
+            </figure>
+          </a>
+        </li>
+      </ul> -->
+    <!-- </div> -->
+  <!-- </main> -->
+
+  <aside class="map" id="map"></aside> <!-- Map -->
+
+  <footer class="footer-primary">
+    <div class="container-fluid">
+      <div class="row"></div>
+    </div>
+  </footer>
+
+
+<script src="libs/js/jquery-2.1.1.min.js"></script>
+<script src="libs/js/bootstrap.js"></script>
+<script src="bower_components/handlebars/handlebars.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaTdjugjXQ2DuUsARrnV8sb1dVoGtIqCI"></script>
+<script src="libs/js/infobox_packed.js"></script>
+<script src="src/js/APP.js"></script>
+<script src="src/js/APP.Geolocation.js"></script>
+<script src="src/js/APP.Home.js"></script>
+<script src="src/js/APP.Request.js"></script>
+<script src="src/js/APP.List.js"></script>
+
+<script>
+  APP.iniciar();
+
+  $('#btn-primary').on('click', function(event) {
+    $('#list-actions').toggleClass('open');
+  });
+</script>
+
+</body>
+</html>
